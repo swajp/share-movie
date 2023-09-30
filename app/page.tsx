@@ -19,7 +19,7 @@ export default async function Home() {
   return (
     <div className="max-w-screen-2xl mx-auto">
       <div className="flex justify-between items-center p-4">
-        <h1 className=" text-black dark:text-white text-4xl font-bold">
+        <h1 className=" text-black dark:text-white text-3xl lg:text-4xl font-bold">
           Popular Movies
         </h1>
         <svg
