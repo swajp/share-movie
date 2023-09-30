@@ -6,8 +6,7 @@ export default async function Home() {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMmI5M2RkMDJlOWNlMDZkNTNhNDZkMzlmNDE0OWRiYiIsInN1YiI6IjY1MTdmMTU5OWI4NjE2MDBjNWNhZmNlYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.920oTwifIVzeFTB-jzbSR1P6NgU8LSiz28Q40hDSDNE",
+      Authorization: `${process.env.NEXT_PUBLIC_API_KEY}`,
     },
   };
   const res = await fetch(
