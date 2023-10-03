@@ -18,10 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className}  bg-white dark:bg-black`}>
+      <body
+        className={`${inter.className}  bg-[#f3f3f3] dark:bg-black/10 h-full`}
+      >
         <Providers>
           <Navbar />
-          <main>{children}</main>
+          <main className="">{children}</main>
         </Providers>
       </body>
     </html>

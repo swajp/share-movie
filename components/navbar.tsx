@@ -6,7 +6,7 @@ import AuthButton from "./authButton";
 
 export default function Navbar() {
   return (
-    <header className=" mx-auto pt-3 px-4 lg:px-12">
+    <header className=" max-w-screen-xl mx-auto px-8 py-3 bg-white dark:bg-black">
       <div className="flex justify-between h-16">
         <div className="flex justify-between items-center w-full">
           <Link href="/">

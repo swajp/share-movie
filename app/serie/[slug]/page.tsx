@@ -18,7 +18,7 @@ export default async function MoviePage({
     },
   };
   const res = await fetch(
-    `https://api.themoviedb.org/3/movie/${params.slug}`,
+    `https://api.themoviedb.org/3/tv/${params.slug}`,
     options
   );
   console.log(res.url);
@@ -32,8 +32,12 @@ export default async function MoviePage({
         <div className="flex flex-col p-6">
           <div className="mb-6 flex flex-col gap-2">
             <div className="flex gap-2 items-end">
-              <h1 className=" font-bold text-4xl">{data.title}</h1>
+              <h1 className=" font-bold text-4xl">{data.name}</h1>
               <h2 className="text-xl"> ({getYear(data.release_date)})</h2>
+            </div>
+            <div className="flex gap-2 border dark:border-white/10 rounded-xl p-2">
+              <p>Seasons: {data.number_of_seasons}</p>
+              <p>Episodes: {data.number_of_episodes}</p>
             </div>
             <div className="flex gap-2">
               {data.genres.map((genre: any) => (
