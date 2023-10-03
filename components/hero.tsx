@@ -1,45 +1,8 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import Image from "next/image";
 import { getSearch } from "./getSearch";
-
-function renderImage(movie: any) {
-  if (movie.poster_path) {
-    return (
-      <div className="p-2">
-        <Image
-          width="80"
-          height="100"
-          alt={movie.media_type === "movie" ? movie.title : movie.name}
-          className="rounded-md"
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-        />
-      </div>
-    );
-  } else {
-    return (
-      <div className="p-2">
-        <div className=" bg-slate-900 w-[80px] h-[100px] rounded-md flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="grey"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-            />
-          </svg>
-        </div>
-      </div>
-    );
-  }
-}
+import MovieImage from "./movieImage";
 
 export default function Hero() {
   const [query, setQuery] = useState("");
@@ -103,7 +66,7 @@ export default function Hero() {
                 key={movie.id}
                 className="bg-white dark:bg-black  border rounded-xl dark:border-white/10 flex items-center"
               >
-                {renderImage(movie)}
+                <MovieImage movie={movie} imgWidth={80} />
 
                 <div className="p-4 font-medium text-lg" key={movie.id}>
                   {movie.media_type === "movie" ? (
