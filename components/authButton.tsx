@@ -1,9 +1,11 @@
 import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function AuthButton() {
-  const { isAuthenticated } = getKindeServerSession();
+  const { isAuthenticated, getUser } = getKindeServerSession();
+  const user = await getUser();
 
   return (
     <div className="flex items-center gap-2">
@@ -13,20 +15,23 @@ export default async function AuthButton() {
             <LogoutLink>Log out</LogoutLink>
           </div>
           <Link href="/dashboard">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+            {user.picture ? (
+              <Image
+                src={user.picture}
+                alt="Profile picture"
+                height={42}
+                width={42}
               />
-            </svg>
+            ) : (
+              <div className=" h-[42px] w-[42px] rounded-full bg-slate-400 dark:bg-gray-900 flex items-center justify-center">
+                <p className="text-white text-base font-medium text-center">
+                  {user.given_name?.[0]}
+                </p>
+                <p className="text-white text-base font-medium text-center">
+                  {user.family_name?.[0]}
+                </p>
+              </div>
+            )}
           </Link>
         </div>
       ) : (
