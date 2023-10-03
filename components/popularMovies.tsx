@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import MovieImage from "./movieImage";
 
 export default async function PopularMovies() {
   const options = {
@@ -30,13 +31,7 @@ export default async function PopularMovies() {
           >
             <Link href={`/movie/${movie.id}`}>
               <div className="p-2">
-                <Image
-                  width={500}
-                  height={750}
-                  alt={movie.title}
-                  className="rounded-md"
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                />
+                <MovieImage movie={movie} imgWidth={500} />
               </div>
               <div className="flex justify-between">
                 <h1 className="font-medium text-xl pl-2">{movie.title}</h1>

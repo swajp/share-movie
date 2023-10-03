@@ -1,15 +1,13 @@
 import React from "react";
 import Image from "next/image";
+import MovieImage from "@/components/movieImage";
+import Link from "next/link";
 
 function getYear(date: string) {
   return new Date(date).getFullYear();
 }
 
-export default async function MoviePage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+async function getShows(params: { slug: string }) {
   const options = {
     method: "GET",
     headers: {
@@ -24,18 +22,44 @@ export default async function MoviePage({
   console.log(res.url);
 
   const data = await res.json();
-  console.log(data);
+  return data;
+}
+
+async function getReviews(params: { slug: string }) {
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `${process.env.NEXT_PUBLIC_API_KEY}`,
+    },
+  };
+  const res = await fetch(
+    `https://api.themoviedb.org/3/tv/${params.slug}/reviews?language=en-US&page=1`,
+    options
+  );
+
+  const reviews = await res.json();
+  return reviews;
+}
+
+export default async function MoviePage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const data = await getShows(params);
+  const reviews = await getReviews(params);
 
   return (
-    <div className="max-w-screen-xl mx-auto p-6 py-8 md:py-12 bg-white dark:bg-black h-screen">
+    <div className="max-w-screen-xl mx-auto p-6 py-8 md:py-12 bg-white dark:bg-black h-auto flex flex-col gap-4 ">
       <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-1 md:gap-8 rounded-xl border-2 dark:border-white/10 ">
         <div className="flex flex-col p-6">
           <div className="mb-6 flex flex-col gap-2">
             <div className="flex gap-2 items-end">
               <h1 className=" font-bold text-4xl">{data.name}</h1>
-              <h2 className="text-xl"> ({getYear(data.release_date)})</h2>
+              <h2 className="text-xl"> ({getYear(data.first_air_date)})</h2>
             </div>
-            <div className="flex gap-2 border dark:border-white/10 rounded-xl p-2">
+            <div className="flex gap-2 border dark:border-white/10 rounded-xl p-2 px-3 w-fit">
               <p>Seasons: {data.number_of_seasons}</p>
               <p>Episodes: {data.number_of_episodes}</p>
             </div>
@@ -83,16 +107,55 @@ export default async function MoviePage({
           </div>
         </div>
         <div className="flex items-center justify-center content-center relative overflow-hidden rounded p-6">
-          <Image
-            src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
-            height={575}
-            width={390}
-            quality="100"
-            alt="img"
-            className="rounded-xl border-2 dark:border-white/10"
-          />
+          <MovieImage movie={data} imgWidth={390} />
         </div>
       </div>
+      {reviews.total_results === 0 ? (
+        <></>
+      ) : (
+        <div className="flex flex-col">
+          <h1 className="font-bold text-4xl p-6">Reviews</h1>
+          <div className="rounded-xl border-2 dark:border-white/10">
+            {reviews.results.map((review: any) => (
+              <div
+                className="p-6 border-b dark:border-white/10"
+                key={review.id}
+              >
+                <div className="flex gap-4 items-center">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-3">
+                      {review.author_details.avatar_path !== null ? (
+                        <Image
+                          src={`https://www.themoviedb.org/t/p/w32_and_h32_face${review.author_details.avatar_path}`}
+                          width={32}
+                          alt="avatar"
+                          height={32}
+                          className="rounded-full"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center text-center content-center justify-center">
+                          <p className="text-white dark:text-black font-medium">
+                            {review.author[0]}
+                          </p>
+                        </div>
+                      )}
+                      <h1 className="font-medium text-xl">
+                        <Link href={review.url}>{review.author}</Link>
+                      </h1>
+                      <p>
+                        {review.author_details.rating !== null
+                          ? review.author_details.rating + "/10"
+                          : ""}
+                      </p>
+                    </div>
+                    <p className="text-base">{review.content}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import MovieImage from "./movieImage";
 
 export default async function PopularMovies() {
   const options = {
@@ -19,7 +20,7 @@ export default async function PopularMovies() {
     <div className="max-w-screen-xl mx-auto bg-white dark:bg-black p-0 md:p-4">
       <div className="flex justify-between items-center  p-4">
         <h1 className=" text-black dark:text-white text-3xl lg:text-4xl font-bold">
-          Popular Movies
+          Popular Series
         </h1>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 md:p-4">
@@ -28,15 +29,9 @@ export default async function PopularMovies() {
             key={movie.id}
             className="p-2 border-2  dark:border-white/10 rounded-2xl"
           >
-            <Link href={`/movie/${movie.id}`}>
+            <Link href={`/serie/${movie.id}`}>
               <div className="p-2">
-                <Image
-                  width={500}
-                  height={750}
-                  alt={movie.name}
-                  className="rounded-md"
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                />
+                <MovieImage movie={movie} imgWidth={500} />
               </div>
               <div className="flex justify-between">
                 <h1 className="font-medium text-base lg:text-xl pl-2">

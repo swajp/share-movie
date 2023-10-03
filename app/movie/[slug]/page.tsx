@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import MovieImage from "@/components/movieImage";
 
 function getYear(date: string) {
   return new Date(date).getFullYear();
@@ -79,14 +80,7 @@ export default async function MoviePage({
           </div>
         </div>
         <div className="flex items-center justify-center content-center relative overflow-hidden rounded p-6">
-          <Image
-            src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
-            height={575}
-            width={390}
-            quality="100"
-            alt="img"
-            className="rounded-xl border-2 dark:border-white/10"
-          />
+          <MovieImage movie={data} imgWidth={390} />
         </div>
       </div>
     </div>
