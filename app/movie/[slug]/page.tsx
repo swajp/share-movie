@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import MovieImage from "@/components/movieImage";
+import Link from "next/link";
 
 function getYear(date: string) {
   return new Date(date).getFullYear();
@@ -22,13 +23,29 @@ export default async function MoviePage({
     `https://api.themoviedb.org/3/movie/${params.slug}`,
     options
   );
-  console.log(res.url);
+
+  async function getReviews(params: { slug: string }) {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `${process.env.NEXT_PUBLIC_API_KEY}`,
+      },
+    };
+    const res = await fetch(
+      `https://api.themoviedb.org/3/movie/${params.slug}/reviews?language=en-US&page=1`,
+      options
+    );
+
+    const reviews = await res.json();
+    return reviews;
+  }
 
   const data = await res.json();
-  console.log(data);
+  const reviews = await getReviews(params);
 
   return (
-    <div className="max-w-screen-xl mx-auto p-6 py-8 md:py-12 bg-white dark:bg-black h-screen">
+    <div className="max-w-screen-xl mx-auto p-6 py-8 md:py-12 bg-white dark:bg-black h-auto flex flex-col gap-4">
       <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-1 md:gap-8 rounded-xl border-2 dark:border-white/10 ">
         <div className="flex flex-col p-6">
           <div className="mb-6 flex flex-col gap-2">
@@ -83,6 +100,52 @@ export default async function MoviePage({
           <MovieImage movie={data} imgWidth={390} />
         </div>
       </div>
+      {reviews.total_results === 0 ? (
+        <></>
+      ) : (
+        <div className="flex flex-col">
+          <h1 className="font-bold text-4xl p-6">Reviews</h1>
+          <div className="rounded-xl border-2 dark:border-white/10">
+            {reviews.results.map((review: any) => (
+              <div
+                className="p-6 border-b dark:border-white/10"
+                key={review.id}
+              >
+                <div className="flex gap-4 items-center">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-3">
+                      {review.author_details.avatar_path !== null ? (
+                        <Image
+                          src={`https://www.themoviedb.org/t/p/w32_and_h32_face${review.author_details.avatar_path}`}
+                          width={32}
+                          alt="avatar"
+                          height={32}
+                          className="rounded-full"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center text-center content-center justify-center">
+                          <p className="text-white dark:text-black font-medium">
+                            {review.author[0]}
+                          </p>
+                        </div>
+                      )}
+                      <h1 className="font-medium text-xl">
+                        <Link href={review.url}>{review.author}</Link>
+                      </h1>
+                      <p>
+                        {review.author_details.rating !== null
+                          ? review.author_details.rating + "/10"
+                          : ""}
+                      </p>
+                    </div>
+                    <p className="text-base">{review.content}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

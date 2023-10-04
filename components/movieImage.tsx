@@ -18,6 +18,14 @@ export default function MovieImage({
           className="rounded-md"
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
         />
+      ) : movie.media_type === "person" ? (
+        <Image
+          width={imgWidth}
+          height={50}
+          alt={movie.original_name}
+          className="rounded-md"
+          src={`https://image.tmdb.org/t/p/w500${movie.profile_path}`}
+        />
       ) : (
         <div className=" bg-slate-900 w-[80px] h-[100px] rounded-md flex items-center justify-center">
           <svg
