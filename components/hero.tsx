@@ -63,6 +63,7 @@ export default function Hero() {
           <div className="absolute grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white dark:bg-black rounded-xl py-4 gap-4">
             {results.map((movie: any) => (
               <Link
+                key={movie.id}
                 href={
                   movie.media_type === "movie"
                     ? `/movie/${movie.id}`
@@ -71,10 +72,7 @@ export default function Hero() {
                     : `/person/${movie.id}`
                 }
               >
-                <div
-                  key={movie.id}
-                  className="bg-white dark:bg-black  border rounded-xl dark:border-white/10 flex items-center"
-                >
+                <div className="bg-white dark:bg-black  border rounded-xl dark:border-white/10 flex items-center">
                   <MovieImage movie={movie} imgWidth={80} />
                   <div className="p-4 font-medium text-lg" key={movie.id}>
                     {movie.media_type === "movie" ? (
