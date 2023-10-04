@@ -19,6 +19,7 @@ export default async function AuthButton() {
               <Image
                 src={user.picture}
                 alt="Profile picture"
+                className="rounded-full"
                 height={42}
                 width={42}
               />
